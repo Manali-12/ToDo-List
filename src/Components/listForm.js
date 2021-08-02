@@ -1,6 +1,6 @@
 import { React, useState } from 'react';
 import { v4 as uuidv4 } from "uuid";
-import { Container, createTheme, ThemeProvider, Typography, makeStyles, ListItemText } from "@material-ui/core";
+import { createTheme, ThemeProvider, Typography, makeStyles, ListItemText } from "@material-ui/core";
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import ListItem from '@material-ui/core/ListItem';
@@ -11,6 +11,10 @@ const theme = createTheme({
         h4: {
             fontSize: "2rem",
             fontWeight: 500,
+        },
+        body1: {
+            fontSize: "20px",
+            fontWeight: 480,
         }
     },
     palette: {
@@ -18,42 +22,68 @@ const theme = createTheme({
             main: "#FFE3E3"
         }
     },
+    overrides: {
+        MuiInputBase: {
+            root: {
+                color: "white",
+                fontSize: "18px",
+                fontWeight: "420px"
+            }
 
+        },
+    }
 
 });
-const useStyles = makeStyles({
-    complete: {
-        textDecoration: "lineThrough"
-    },
-    f_area: {
-        backgroundColor: "#262A53",
-        maxWidth: "60%",
-        margin: "3% auto 0 auto",
-        padding: "2%",
-        borderRadius: "25px 25px 0 0 "
-    },
-    i_field: {
-        width: "80%",
-        color: "white",
+const useStyles = makeStyles((theme) => {
+    return {
+        complete: {
+            textDecoration: "lineThrough"
+        },
+        todo_area: {
+            border: "2px",
+            borderRadius: "25px",
+            maxWidth: "60%",
+            margin: "auto"
 
-    },
-    t_list: {
-        backgroundColor: "#FFA0A0",
-        maxWidth: "60%",
-        margin: "1% auto 5% auto",
-        padding: "0 2% 0 2%",
-        wordWrap: "break-word",
+        },
+        f_area: {
+            backgroundColor: "#262A53",
+            maxWidth: "100%",
+            margin: "3% auto 0 auto",
+            padding: "3% 5%",
+            borderRadius: "25px 25px 0 0",
+            zIndex: 1,
+        },
+        i_field: {
+            width: "87%",
 
-    },
-    but_style: {
-        margin: "2%"
-    }
+        },
+        t_list: {
+            backgroundColor: "#FFA0A0",
+            maxWidth: "100%",
+            margin: "0 auto 5% auto",
+            padding: "2% 2% 0 2%",
+            wordWrap: "break-word",
+            borderRadius: "0 0 25px 25px",
+            zIndex: -1,
+        },
+        but_style: {
+            margin: "2%"
+        },
+        l_item: {
+            flexGrow: 1,
+            color: "#262A53",
+        },
+
+    };
 })
 export default function ListForm() {
 
     const [input, setinput] = useState("");
     const [todo, settodo] = useState([]);
-    const classes = useStyles();
+    const classes = useStyles(todo);
+    console.log(todo);
+
 
     const handleChange = (e) => {
         setinput(e.target.value);
@@ -77,16 +107,16 @@ export default function ListForm() {
                 return { ...item, completed: !item.completed };
             }
             return item;
+
         }
         ));
-        if (elem.completed)
-            document.getElementsByClassName(".textInput").classlist.add("classes.complete");
     }
+
 
     return (
 
 
-        <div >
+        <div className={classes.todo_area}>
             <ThemeProvider theme={theme}>
                 <div >
                     <div className={classes.f_area}>
@@ -104,27 +134,27 @@ export default function ListForm() {
                                 variant="filled"
                                 value={input}
                                 onChange={handleChange}
-                                style={{ color: "white" }}
                                 InputLabelProps={{
                                     shrink: true,
                                 }}
                                 margin="dense"
                                 color="primary"
-                                fullWidth filled
+                                fullWidth filled="true"
                                 className={classes.i_field}
                             />
                             <Button type="submit" color="primary" variant="outlined" className={classes.but_style}>ADD</Button>
                         </form>
                     </div>
                     <div className={classes.t_list}>
-                        <ul>
+                        <ul style={{ margin: 0 }}>
                             {todo.map((item) =>
                                 <ListItem key={item.id}>
                                     <ListItemText
                                         primary={item.title}
+                                        className={classes.l_item}
                                     />
                                     <div>
-                                        <Button onClick={() => handleComplete(item)}>✔</Button>
+                                        <Button className={classes.test} onClick={() => handleComplete(item)}>{item.completed ? "✔✔" : "✔"}</Button>
                                         <Button color="secondary" onClick={() => handleDelete(item)}>❌</Button>
                                     </div>
                                 </ListItem>)}
