@@ -8,6 +8,7 @@ const useStyles = makeStyles({
         textAlign: "left",
         padding: "2%",
         margin: "4% 4% 0 4%",
+        borderRadius: "25px",
     }
 })
 export default function Layout({ children }) {
